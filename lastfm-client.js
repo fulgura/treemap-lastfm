@@ -17,11 +17,13 @@ function parseJSON(json)
 {
 
 
-   $("#output").html(json.toString());
+  
    
    jQuery.each(json.topalbums.album, function(i, album) {
     
-      alert(album.name);
+      //alert(album.name);
+     $("#output").append(album.name + "<br />");
+      
       //$("#" + i).append(document.createTextNode(" - " + val));
 
     });
