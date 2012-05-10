@@ -1,6 +1,15 @@
 
-function init() {
 
+var json = { "children": [
+    
+  ],
+  "data": {
+  },
+  "id": "root",
+  "name": "Favourite Artists"
+};
+
+$("#output").append(json + "<br />");
 
 /* Create a cache object */
   var cache = new LastFMCache();
@@ -12,26 +21,69 @@ function init() {
     cache     : cache
   });
 
+
+function init() {
+
+ /* Load some artist info. */
+  lastfm.artist.getTopAlbums({artist: 'zappa'}, {success: parseTopAlbums, error:errorHandler });
+
   /* Load some artist info. */
-  lastfm.artist.getTopAlbums({artist: 'zappa'}, {success: function(data){
-    /* Use data. */
-    //alert(data.topalbums);
-    jQuery.each(data.topalbums.album, function(i, album) {
-        $("#output").append(album.name + "<br />");
+  // lastfm.artist.getTopAlbums({artist: 'madonna'}, {success: function(data){
+  //   /* Use data. */
+  //   //alert(data.topalbums);
+  //   jQuery.each(data.topalbums.album, function(i, album) {
+        
+  //       $("#output").append(album.name + "<br />");
 
-         lastfm.album.getInfo({artist: 'zappa', album:album.name }, {success: function(albumInfo){
+  //        lastfm.album.getInfo({artist: 'madonna', album:album.name }, {success: function(albumInfo){
             
-              $("#output").append(albumInfo.album.playcount + "<br />");
+  //             $("#output").append(albumInfo.album.playcount + "<br />");
             
-            }, error: errorHandler
-          });
-    });
+  //           }, error: errorHandler
+  //         });
+  //   });
 
 
-  }, error:errorHandler
-  });
-}
+  // }, error:errorHandler
+  // });
+};
 
 function errorHandler(code, message) {
   alert(code + ". " + message);
+};
+
+function parseAlbumInfo(albumInfo){
+
+  $("#output").append(albumInfo.album.playcount + "<br />");
+     
+};
+
+
+function parseAlbum(i, album){
+
+  $("#output").append(album.name + "<br />");
+  lastfm.album.getInfo({artist: 'zappa', album:album.name }, {success: parseAlbumInfo, error:errorHandler });
+
+  var jsonAlbum = { 
+                    
+                        "children": [
+                        ],
+                        "data": {
+                          "playcount": "276",
+                          "$color": "#8E7032",
+                          "image": "http://userserve-ak.last.fm/serve/300x300/11403219.jpg",
+                          "$area": 100
+                        },
+                        "id": album.name,
+                        "name": album.name
+                    };
+
+  json.children[json.children.length] = jsonAlbum;
+  
+  console.log(json);                  
+};
+
+function parseTopAlbums(data){
+
+      jQuery.each(data.topalbums.album, parseAlbum);
 };
