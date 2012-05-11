@@ -86,6 +86,8 @@ function parseAlbum(i, album){
 
   lastfm.album.getInfo({artist: artistName, album: album.name}, {success: parseAlbumInfo, error:errorHandler });
 
+  invokeAPI("")
+
   var jsonAlbum = { "children": [
                         ],
                         "data": {
@@ -202,4 +204,23 @@ function initTreemap(){
   $jit.util.addEvent(back, 'click', function() {
     tm.out();
   });
+}
+
+/**
+* url: "http://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&artist=zappa&api_key=b25b959554ed76058ac220b7b2e0a026&format=json"
+* successFunction: 
+*
+*/
+function invokeAPI(url, successFunction) {
+
+  $(document).ready(function()
+  {
+    $.ajax({
+      type: "GET",
+      url: url,
+      dataType: "json",
+      success: successFunction
+    });
+  });
+
 }
