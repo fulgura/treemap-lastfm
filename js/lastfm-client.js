@@ -70,11 +70,6 @@ function parseAlbumInfo(albumInfo){
   if(albumInfo.album.image.length > 0){
     json.children[albumCount].data.image = albumInfo.album.image[0]["#text"];
   }
-  
-  albumCount++;
-  if(albumCount == json.children.length){
-    initTreemap();
-  }               
    
 };
 
@@ -82,19 +77,24 @@ function parseAlbumInfo(albumInfo){
 function parseAlbum(i, album){
 
   $("#output").append(album.name + "<br />");
-  $("#output").append(encodeURIComponent(album.name) + "<br />");
+  
+  //lastfm.album.getInfo({artist: artistName, album: album.name}, {success: parseAlbumInfo, error:errorHandler });
 
-  lastfm.album.getInfo({artist: artistName, album: album.name}, {success: parseAlbumInfo, error:errorHandler });
+  var imageURL;
+  
+  if(album.image.length > 0){
+    imageURL = album.image[0]["#text"];
+  }
 
-  invokeAPI("")
+  
 
   var jsonAlbum = { "children": [
                         ],
                         "data": {
-                          "playcount": "276",
+                          "playcount": album.playcount,
                           "$color": "#8E7032",
-                          "image": "http://userserve-ak.last.fm/serve/300x300/11403219.jpg",
-                          "$area": 100
+                          "image": imageURL,
+                          "$area": album.playcount
                         },
                         "id": album.name,
                         "name": album.name
@@ -102,14 +102,24 @@ function parseAlbum(i, album){
 
   json.children[json.children.length] = jsonAlbum;
   
-  console.log(json);                  
+  console.log(json);   
+
+  if(albumCount == json.children.length){
+    initTreemap();
+  }
+
 };
-
+/**
+ *
+ *
+ */
 function parseTopAlbums(data){
+ 
+  if(data.topalbums.album){
 
-    if(data.topalbums.album){
-      jQuery.each(data.topalbums.album, parseAlbum);
-    }
+    albumCount = data.topalbums.album.length;
+    jQuery.each(data.topalbums.album, parseAlbum);
+  }
 
 };
 
@@ -204,23 +214,4 @@ function initTreemap(){
   $jit.util.addEvent(back, 'click', function() {
     tm.out();
   });
-}
-
-/**
-* url: "http://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&artist=zappa&api_key=b25b959554ed76058ac220b7b2e0a026&format=json"
-* successFunction: 
-*
-*/
-function invokeAPI(url, successFunction) {
-
-  $(document).ready(function()
-  {
-    $.ajax({
-      type: "GET",
-      url: url,
-      dataType: "json",
-      success: successFunction
-    });
-  });
-
 }
