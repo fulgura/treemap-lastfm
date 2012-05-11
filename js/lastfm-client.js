@@ -27,6 +27,7 @@ var Log = {
 /** Global variables */
 var albumCount = 0;
 var artistName = "zappa";
+
 var json = { "children": [
     
   ],
@@ -55,7 +56,7 @@ function init() {
 };
 
 function errorHandler(code, message) {
-  alert(code + ". " + message);
+  $("#output").append("Error code:" + code + ". " + message + "<br />");
 };
 
 function parseAlbumInfo(albumInfo){
@@ -63,10 +64,9 @@ function parseAlbumInfo(albumInfo){
 
   $("#output").append(albumInfo.album.playcount + "<br />");
   
-  albumCount++;
-
+  json.children[albumCount++].data["$area"] = albumInfo.album.playcount;
+  
   if(albumCount == json.children.length){
-    $("#output").append("Llamemos al mapa !!<br />");
     initTreemap();
   }               
    
@@ -76,11 +76,11 @@ function parseAlbumInfo(albumInfo){
 function parseAlbum(i, album){
 
   $("#output").append(album.name + "<br />");
-  lastfm.album.getInfo({artist: artistName, album:album.name }, {success: parseAlbumInfo, error:errorHandler });
+  $("#output").append(encodeURIComponent(album.name) + "<br />");
 
-  var jsonAlbum = { 
-                    
-                        "children": [
+  lastfm.album.getInfo({artist: artistName, album: album.name}, {success: parseAlbumInfo, error:errorHandler });
+
+  var jsonAlbum = { "children": [
                         ],
                         "data": {
                           "playcount": "276",
@@ -99,7 +99,9 @@ function parseAlbum(i, album){
 
 function parseTopAlbums(data){
 
+    if(data.topalbums.album){
       jQuery.each(data.topalbums.album, parseAlbum);
+    }
 
 };
 
