@@ -64,8 +64,14 @@ function parseAlbumInfo(albumInfo){
 
   $("#output").append(albumInfo.album.playcount + "<br />");
   
-  json.children[albumCount++].data["$area"] = albumInfo.album.playcount;
+  json.children[albumCount].data["$area"] = albumInfo.album.playcount;
+  json.children[albumCount].data.playcount = albumInfo.album.playcount;
   
+  if(albumInfo.album.image.length > 0){
+    json.children[albumCount].data.image = albumInfo.album.image[0]["#text"];
+  }
+  
+  albumCount++;
   if(albumCount == json.children.length){
     initTreemap();
   }               
