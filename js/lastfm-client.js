@@ -27,6 +27,7 @@ var Log = {
 /** Global variables */
 var albumCount = 0;
 var artistName = "Paul Van Dyk";
+var tm;
 
 var json = { "children": [
     
@@ -34,7 +35,7 @@ var json = { "children": [
   "data": {
   },
   "id": "root",
-  "name": "Favourite Artists"
+  "name": artistName + " Top Albums"
 };
 
 /* Create a cache object */
@@ -50,6 +51,9 @@ var json = { "children": [
 
 function init() {
 
+  if(!tm){
+    initTreemap();
+  }
  /* Load some artist info. */
   lastfm.artist.getTopAlbums({artist: artistName}, {success: parseTopAlbums, error:errorHandler });
 
@@ -105,7 +109,7 @@ function parseAlbum(i, album){
   console.log(json);   
 
   if(albumCount == json.children.length){
-    initTreemap();
+    treeMapLoadJSON();
   }
 
 };
@@ -123,11 +127,17 @@ function parseTopAlbums(data){
 
 };
 
+
+function treeMapLoadJSON(){
+  tm.loadJSON(json);
+  tm.refresh();
+}
+
 function initTreemap(){
   
   //end
   //init TreeMap
-  var tm = new $jit.TM.Squarified({
+  tm = new $jit.TM.Squarified({
     //where to inject the visualization
     injectInto: 'infovis',
     //parent box title heights
@@ -184,8 +194,8 @@ function initTreemap(){
         };
     }
   });
-  tm.loadJSON(json);
-  tm.refresh();
+  // tm.loadJSON(json);
+  // tm.refresh();
   //end
   //add events to radio buttons
   var sq = $jit.id('r-sq'),
@@ -214,4 +224,21 @@ function initTreemap(){
   $jit.util.addEvent(back, 'click', function() {
     tm.out();
   });
+}
+
+function onChangeArtist(){
+  var text = document.getElementById('artist');
+  //$("#output").append(text.value + "<br />");
+  
+  artistName = text.value;
+  json = { "children": [
+    
+  ],
+  "data": {
+  },
+  "id": "root",
+  "name": artistName + " Top Albums"
+};
+
+  init();
 }
