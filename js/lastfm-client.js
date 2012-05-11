@@ -92,8 +92,6 @@ function parseAlbum(i, album){
         imageURL = album.image[0]["#text"];
       }
 
-      
-
       var jsonAlbum = { "children": [
                             ],
                             "data": {
@@ -125,8 +123,15 @@ function parseTopAlbums(data){
  
   if(data.topalbums.album){
 
-    albumCount = data.topalbums.album.length;
-    jQuery.each(data.topalbums.album, parseAlbum);
+    /** Cheks if there are just one album*/
+    if(data.topalbums.album.length != undefined){
+      albumCount = data.topalbums.album.length;
+      jQuery.each(data.topalbums.album, parseAlbum);
+
+    }else{
+      albumCount = 1;
+      parseAlbum(0, data.topalbums.album);
+    }
   }
 
 };
