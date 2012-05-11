@@ -85,26 +85,30 @@ function parseAlbum(i, album){
   //lastfm.album.getInfo({artist: artistName, album: album.name}, {success: parseAlbumInfo, error:errorHandler });
 
   var imageURL;
-  
-  if(album.image.length > 0){
-    imageURL = album.image[0]["#text"];
+
+  if(album != undefined && album.name != undefined && album.playcount != undefined ){
+
+    if(album.image.length > 0){
+        imageURL = album.image[0]["#text"];
+      }
+
+      
+
+      var jsonAlbum = { "children": [
+                            ],
+                            "data": {
+                              "playcount": album.playcount,
+                              "$color": "#8E7032",
+                              "image": imageURL,
+                              "$area": album.playcount
+                            },
+                            "id": album.name,
+                            "name": album.name
+                        };
+
+      json.children[json.children.length] = jsonAlbum;
   }
-
   
-
-  var jsonAlbum = { "children": [
-                        ],
-                        "data": {
-                          "playcount": album.playcount,
-                          "$color": "#8E7032",
-                          "image": imageURL,
-                          "$area": album.playcount
-                        },
-                        "id": album.name,
-                        "name": album.name
-                    };
-
-  json.children[json.children.length] = jsonAlbum;
   
   console.log(json);   
 
