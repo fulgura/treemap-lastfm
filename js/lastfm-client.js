@@ -60,7 +60,7 @@ function init() {
 };
 
 function errorHandler(code, message) {
-  $("#output").append("Error code:" + code + ". " + message + "<br />");
+  $("#log").append("Error code:" + code + ". " + message + "<br />");
 };
 
 function parseAlbumInfo(albumInfo){
@@ -130,6 +130,8 @@ function parseTopAlbums(data){
       albumCount = 1;
       parseAlbum(0, data.topalbums.album);
     }
+  }else{
+      $("#output").append("No albums for " + artistName + "<br />");
   }
 
 };
