@@ -64,9 +64,7 @@ function errorHandler(code, message) {
 };
 
 function parseAlbumInfo(albumInfo){
-
-
-  $("#output").append(albumInfo.album.playcount + "<br />");
+  //$("#output").append(albumInfo.album.playcount + "<br />");
   
   json.children[albumCount].data["$area"] = albumInfo.album.playcount;
   json.children[albumCount].data.playcount = albumInfo.album.playcount;
@@ -80,7 +78,7 @@ function parseAlbumInfo(albumInfo){
 
 function parseAlbum(i, album){
 
-  $("#output").append(album.name + "<br />");
+  //$("#output").append(album.name + "<br />");
   
   //lastfm.album.getInfo({artist: artistName, album: album.name}, {success: parseAlbumInfo, error:errorHandler });
 
