@@ -26,7 +26,7 @@ var Log = {
 };
 /** Global variables */
 var albumCount = 0;
-var artistName = "zappa";
+var artistName = "Paul Van Dyk";
 
 var json = { "children": [
     
