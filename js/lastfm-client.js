@@ -75,6 +75,18 @@ function parseAlbumInfo(albumInfo){
    
 };
 
+function calculateColor(playcount) {
+
+  console.log(playcount);
+
+  if(playcount > 0 && playcount < 200){
+    return "#FEE8C8";    
+  } else if(playcount > 201 && playcount < 1000){
+    return "#FDBB84";    
+  } else {
+    return "#E34A33";
+  }
+}
 
 function parseAlbum(i, album){
 
@@ -94,7 +106,7 @@ function parseAlbum(i, album){
                             ],
                             "data": {
                               "playcount": album.playcount,
-                              "$color": "#8E7032",
+                              "$color": calculateColor(album.playcount),
                               "image": imageURL,
                               "$area": album.playcount
                             },
@@ -135,7 +147,6 @@ function parseTopAlbums(data){
   }
 
 };
-
 
 function treeMapLoadJSON(){
   tm.loadJSON(json);
