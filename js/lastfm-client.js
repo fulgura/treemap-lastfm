@@ -1,4 +1,5 @@
 var labelType, useGradients, nativeTextSupport, animate;
+var tm;
 
 (function() {
   var ua = navigator.userAgent,
@@ -26,7 +27,7 @@ var Log = {
 };
 /** Global variables */
 var albumCount = 0;
-var artistName = "zappa";
+var artistName = "madonna";
 
 var json = { "children": [
     
@@ -115,7 +116,8 @@ function initTreemap(){
   
   //end
   //init TreeMap
-  var tm = new $jit.TM.Squarified({
+  if(tm == null){
+    tm = new $jit.TM.Squarified({
     //where to inject the visualization
     injectInto: 'infovis',
     //parent box title heights
@@ -172,6 +174,7 @@ function initTreemap(){
         };
     }
   });
+  }
   tm.loadJSON(json);
   tm.refresh();
   //end
@@ -202,4 +205,19 @@ function initTreemap(){
   $jit.util.addEvent(back, 'click', function() {
     tm.out();
   });
+}
+
+function onChangeArtist(){
+	json = { "children": [
+
+	  ],
+	  "data": {
+	  },
+	  "id": "root",
+	  "name": "Favourite Artists"
+	};
+	var text = document.getElementById('artist');
+	alert(text.value);
+	artistName = text.value;
+	init();
 }
