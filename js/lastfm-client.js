@@ -1,4 +1,5 @@
 
+var albumCount = 0;
 
 var json = { "children": [
     
@@ -54,8 +55,15 @@ function errorHandler(code, message) {
 
 function parseAlbumInfo(albumInfo){
 
+
   $("#output").append(albumInfo.album.playcount + "<br />");
-     
+  
+  albumCount++;
+
+  if(albumCount == json.children.length){
+    $("#output").append("Llamemos al mapa !!<br />");
+  }               
+   
 };
 
 
@@ -86,4 +94,5 @@ function parseAlbum(i, album){
 function parseTopAlbums(data){
 
       jQuery.each(data.topalbums.album, parseAlbum);
+
 };
