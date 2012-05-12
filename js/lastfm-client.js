@@ -84,9 +84,6 @@ function parseAlbumInfo(albumInfo){
 function calculateColor(playcount, listeners) {
 
  var ratio = Math.floor(playcount / listeners);
-
-$("#output").append("Ratio:" + ratio + "<br />");
-
  
 if(ratio <= 2){
     return "#FFFFCC";
