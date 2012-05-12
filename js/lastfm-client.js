@@ -67,46 +67,75 @@ function parseAlbumInfo(albumInfo){
   //$("#output").append(albumInfo.album.playcount + "<br />");
   
   json.children[albumCount].data["$area"] = albumInfo.album.playcount;
+  json.children[albumCount].data["$color"] = calculateColor(albumInfo.album.playcount, albumInfo.album.listeners);
+
   json.children[albumCount].data.playcount = albumInfo.album.playcount;
+  json.children[albumCount].data.listeners = albumInfo.album.listeners;
   
   if(albumInfo.album.image.length > 0){
     json.children[albumCount].data.image = albumInfo.album.image[0]["#text"];
   }
-   
+  if(++albumCount == json.children.length){
+     treeMapLoadJSON();
+  }
+
 };
 
-function calculateColor(playcount) {
+function calculateColor(playcount, listeners) {
 
-  console.log(playcount);
+ var ratio = Math.floor(playcount / listeners);
 
-  if(playcount > 0 && playcount < 200){
-    return "#FEE8C8";    
-  } else if(playcount > 201 && playcount < 1000){
-    return "#FDBB84";    
-  } else {
-    return "#E34A33";
-  }
+$("#output").append("Ratio:" + ratio + "<br />");
+
+ 
+if(ratio <= 2){
+    return "#FFFFCC";
+}
+if(ratio <= 4){
+    return "#C7E9B4";
+}
+if(ratio <= 6){
+    return "#7FCDBB";
+}
+if(ratio <= 8){
+    return "#41B6C4";
+}
+if(ratio <= 10){
+    return "#2C7FB8";
+}
+return "#253494";
+
+
+
+ //if(ratio > 0 && ratio < 5){
+ //   return "#FDE0DD";    
+ //} else if(playcount > 50001 && playcount < 100000){
+ //   return "#FA9FB5";
+ //} else {
+ //   return "#C51B8A";
+// }
 }
 
 function parseAlbum(i, album){
 
   //$("#output").append(album.name + "<br />");
   
-  //lastfm.album.getInfo({artist: artistName, album: album.name}, {success: parseAlbumInfo, error:errorHandler });
+  lastfm.album.getInfo({artist: artistName, album: album.name}, {success: parseAlbumInfo, error:errorHandler });
 
   var imageURL;
 
   if(album != undefined && album.name != undefined && album.playcount != undefined ){
 
     if(album.image.length > 0){
-        imageURL = album.image[0]["#text"];
+        imageURL = album.image[album.image.length - 1]["#text"];
       }
 
       var jsonAlbum = { "children": [
                             ],
                             "data": {
                               "playcount": album.playcount,
-                              "$color": calculateColor(album.playcount),
+                              "listeners": 0,
+                              "$color": "#FDE0DD",
                               "image": imageURL,
                               "$area": album.playcount
                             },
@@ -120,9 +149,9 @@ function parseAlbum(i, album){
   
   console.log(json);   
 
-  if(albumCount == json.children.length){
-    treeMapLoadJSON();
-  }
+  // if(albumCount == json.children.length){
+  //   treeMapLoadJSON();
+  // }
 
 };
 /**
@@ -135,11 +164,11 @@ function parseTopAlbums(data){
 
     /** Cheks if there are just one album*/
     if(data.topalbums.album.length != undefined){
-      albumCount = data.topalbums.album.length;
+      //albumCount = data.topalbums.album.length;
       jQuery.each(data.topalbums.album, parseAlbum);
 
     }else{
-      albumCount = 1;
+      //albumCount = 1;
       parseAlbum(0, data.topalbums.album);
     }
   }else{
@@ -191,7 +220,10 @@ function initTreemap(){
           + "</div><div class=\"tip-text\">";
         var data = node.data;
         if(data.playcount) {
-          html += "play count: " + data.playcount;
+          html += "play count: " + data.playcount + " <br />";
+        }
+        if(data.listeners) {
+          html += " listeners count: " + data.listeners;
         }
         if(data.image) {
           html += "<img src=\""+ data.image +"\" class=\"album\" />";
@@ -251,6 +283,8 @@ function onChangeArtist(){
   //$("#output").append(text.value + "<br />");
   
   artistName = text.value;
+  albumCount = 0;
+
   json = { "children": [
     
   ],
