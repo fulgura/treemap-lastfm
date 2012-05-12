@@ -26,10 +26,42 @@
 <link type="text/css" href="css/Treemap.css" rel="stylesheet" />
 
 <!--[if IE]><script language="javascript" type="text/javascript" src="../../Extras/excanvas.js"></script><![endif]-->
+<style type="text/css">
+  /*this is what we want the div to look like
+    when it is not showing*/
+  div.loading-invisible{
+    /*make invisible*/
+    display:none;
+  }
 
+  /*this is what we want the div to look like
+    when it IS showing*/
+  div.loading-visible{
+    /*make visible*/
+    display:block;
+
+    /*position it 200px down the screen*/
+    position:absolute;
+    top:250px;
+    left:0;
+    width:100%;
+    text-align:center;
+    
+    /*in supporting browsers, make it
+      a little transparent
+    background:#ffffff;*/
+    filter: alpha(opacity=75); /* internet explorer */
+    -khtml-opacity: 0.75;      /* khtml, old safari */
+    -moz-opacity: 0.75;       /* mozilla, netscape */
+    opacity: 0.9;           /* fx, safari, opera */
+    /*border-top:1px solid #ddd;
+    /*border-bottom:1px solid #ddd;*/
+  }
+</style>
 </head>
 
 <body onload="init();">
+
 <div id="container">
 
 <div id="left-container">
@@ -38,9 +70,6 @@
 
 <input type="text" name="sex" id="artist" class="input" onchange="onChangeArtist();"/>
 
-<div class="text">
-            
-</div>
 
 <div id="id-list">
 <table>
@@ -71,11 +100,18 @@
 
 <a id="back" href="#" class="theme button white">Go to Parent</a>
 
+<div class="text">
+         <p><b>Size:</b> play count.<br\>
+	        <b>Color:</b> listener rate. (Plays per listener)
+	     </p> 
+</div>
 
 </div>
 
 <div id="center-container">
-    <div id="infovis"></div>    
+    <div id="infovis"></div>
+	<div id="loading" class="loading-invisible">
+		<img src="loading.gif" border=0></div>    
 </div>
 
 <div id="right-container">
@@ -83,7 +119,6 @@
 <div id="inner-details"></div>
 
 </div>
-
 <div id="log"></div>
 </div>
 <div id="output"></div>

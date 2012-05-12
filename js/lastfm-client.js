@@ -51,6 +51,8 @@ var json = { "children": [
 
 function init() {
 
+  document.getElementById("loading").className = "loading-visible";
+
   if(!tm){
     initTreemap();
   }
@@ -177,6 +179,7 @@ function parseTopAlbums(data){
 function treeMapLoadJSON(){
   tm.loadJSON(json);
   tm.refresh();
+  document.getElementById("loading").className = "loading-invisible";
 }
 
 function initTreemap(){
